@@ -37,6 +37,7 @@ namespace Assignment2.Tests.Controllers
             controller = new BooksController(mock.Object);
         }
 
+        //Index test
         [TestMethod]
         public void IndexReturnsView()
         {
@@ -46,5 +47,163 @@ namespace Assignment2.Tests.Controllers
             // assert
             Assert.AreEqual("Index", result.ViewName);
         }
+
+        [TestMethod]
+        public void IndexReturnsBooks()
+        {
+            // act - does the viewresults Model equal a list of albums?
+            var actual = (List<Book>)((ViewResult)controller.Index()).Model;
+
+            // assert
+            CollectionAssert.AreEqual(books.OrderBy(b => b.Author).ThenBy(b => b.BookTitle).ToList(), actual);
+        }
+
+        //Details tests
+        #region
+        [TestMethod]
+        public void DetailsNoId()
+        {
+            // act
+            var result = (ViewResult)controller.Details(null);
+
+            // assert
+            Assert.AreEqual("Error", result.ViewName);
+        }
+
+        [TestMethod]
+        public void DetailsInvalidId()
+        {
+            // act
+            var result = (ViewResult)controller.Details(67830);
+
+            // assert
+            Assert.AreEqual("Error", result.ViewName);
+        }
+
+        [TestMethod]
+        public void DetailsValidId()
+        {
+            // act - cast the model as an Album object
+            Book actual = (Book)((ViewResult)controller.Details(200)).Model;
+
+            // assert - is this the first mock album in our array?
+            Assert.AreEqual(books[1], actual);
+        }
+
+        [TestMethod]
+        public void DetailsViewLoads()
+        {
+            // act
+            ViewResult result = (ViewResult)controller.Details(200);
+
+            // assert
+            Assert.AreEqual("Details", result.ViewName);
+        }
+        #endregion
+
+        //GET: Create test
+        #region
+
+        [TestMethod]
+        public void CreateViewLoads()
+        {
+            // act
+            var result = (ViewResult)controller.Create();
+
+            // assert
+            Assert.AreEqual("Create", result.ViewName);
+        }
+        #endregion
+
+        //GET: Edit test
+        #region
+        [TestMethod]
+        public void EditNoId()
+        {
+            // arrange
+            int? id = null;
+
+            // act 
+            var result = (ViewResult)controller.Edit(id);
+
+            // assert
+            Assert.AreEqual("Error", result.ViewName);
+        }
+
+        [TestMethod]
+        public void EditInvalidId()
+        {
+            // act
+            var result = (ViewResult)controller.Edit(8983);
+
+            // assert
+            Assert.AreEqual("Error", result.ViewName);
+        }
+
+        [TestMethod]
+        public void EditViewLoads()
+        {
+            // act
+            ViewResult actual = (ViewResult)controller.Edit(300);
+
+            // assert
+            Assert.AreEqual("Edit", actual.ViewName);
+        }
+
+        [TestMethod]
+        public void EditLoadsBook()
+        {
+            // act
+            Book actual = (Book)((ViewResult)controller.Edit(300)).Model;
+
+            // assert
+            Assert.AreEqual(books[2], actual);
+        }
+        #endregion
+
+        //GET: Delete test
+        #region
+
+        [TestMethod]
+        public void DeleteNoId()
+        {
+            // act
+            var result = (ViewResult)controller.Delete(null);
+
+            // assert
+            Assert.AreEqual("Error", result.ViewName);
+        }
+
+        [TestMethod]
+        public void DeleteInvalidId()
+        {
+            // act
+            var result = (ViewResult)controller.Delete(3739);
+
+            // assert
+            Assert.AreEqual("Error", result.ViewName);
+        }
+
+        [TestMethod]
+        public void DeleteValidIdLoadsView()
+        {
+            // act
+            var result = (ViewResult)controller.Delete(100);
+
+            // assert
+            Assert.AreEqual("Delete", result.ViewName);
+        }
+
+        [TestMethod]
+        public void DeleteValidIdLoadsAlbum()
+        {
+            // act
+            Book result = (Book)((ViewResult)controller.Delete(100)).Model;
+
+            // assert
+            Assert.AreEqual(books[0], result);
+        }
+
+        #endregion
     }
 }

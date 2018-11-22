@@ -37,89 +37,107 @@ namespace Assignment1.Controllers
             return View("Index", books);
         }
 
-        //// GET: Books/Details/5
-        //public ActionResult Details(int? id)
-        //{
-        //    if (id == null)
-        //    {
-        //        return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-        //    }
-        //    Book book = db.Books.Find(id);
-        //    if (book == null)
-        //    {
-        //        return HttpNotFound();
-        //    }
-        //    return View(book);
-        //}
+        // GET: Books/Details/5
+        public ActionResult Details(int? id)
+        {
+            if (id == null)
+            {
+                //return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+                return View("Error");
+            }
+            //original
+            //Book book = db.Books.Find(id);
 
-        //// GET: Books/Create
-        //public ActionResult Create()
-        //{
-        //    return View();
-        //}
+            //new code for mock and database
+            Book book = db.Books.SingleOrDefault(b => b.BookId == id);
 
-        //// POST: Books/Create
-        //// To protect from overposting attacks, please enable the specific properties you want to bind to, for 
-        //// more details see https://go.microsoft.com/fwlink/?LinkId=317598.
-        //[HttpPost]
-        //[ValidateAntiForgeryToken]
-        //public ActionResult Create([Bind(Include = "BookId,BookTitle,Author,Genre")] Book book)
-        //{
-        //    if (ModelState.IsValid)
-        //    {
-        //        db.Books.Add(book);
-        //        db.SaveChanges();
-        //        return RedirectToAction("Index");
-        //    }
+            if (book == null)
+            {
+                //return HttpNotFound();
+                return View("Error");
+            }
+            return View("Details", book);
+        }
 
-        //    return View(book);
-        //}
+        // GET: Books/Create
+        public ActionResult Create()
+        {
+            return View("Create");
+        }
 
-        //// GET: Books/Edit/5
-        //public ActionResult Edit(int? id)
-        //{
-        //    if (id == null)
-        //    {
-        //        return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-        //    }
-        //    Book book = db.Books.Find(id);
-        //    if (book == null)
-        //    {
-        //        return HttpNotFound();
-        //    }
-        //    return View(book);
-        //}
+        // POST: Books/Create
+        // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
+        // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult Create([Bind(Include = "BookId,BookTitle,Author,Genre")] Book book)
+        {
+            if (ModelState.IsValid)
+            {
+                //db.Books.Add(book);
+                //db.SaveChanges();
+                db.Save(book);
+                return RedirectToAction("Index");
+            }
+            return View("Create", book);
+        }
 
-        //// POST: Books/Edit/5
-        //// To protect from overposting attacks, please enable the specific properties you want to bind to, for 
-        //// more details see https://go.microsoft.com/fwlink/?LinkId=317598.
-        //[HttpPost]
-        //[ValidateAntiForgeryToken]
-        //public ActionResult Edit([Bind(Include = "BookId,BookTitle,Author,Genre")] Book book)
-        //{
-        //    if (ModelState.IsValid)
-        //    {
-        //        db.Entry(book).State = EntityState.Modified;
-        //        db.SaveChanges();
-        //        return RedirectToAction("Index");
-        //    }
-        //    return View(book);
-        //}
+        // GET: Books/Edit/5
+        public ActionResult Edit(int? id)
+        {
+            if (id == null)
+            {
+                //return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+                return View("Error");
+            }
+            //original
+            //Book book = db.Books.Find(id);
 
-        //// GET: Books/Delete/5
-        //public ActionResult Delete(int? id)
-        //{
-        //    if (id == null)
-        //    {
-        //        return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-        //    }
-        //    Book book = db.Books.Find(id);
-        //    if (book == null)
-        //    {
-        //        return HttpNotFound();
-        //    }
-        //    return View(book);
-        //}
+            //new code for mock and database
+            Book book = db.Books.SingleOrDefault(b => b.BookId == id);
+
+            if (book == null)
+            {
+                //return HttpNotFound();
+                return View("Error");
+            }
+            return View("Edit", book);
+        }
+
+        // POST: Books/Edit/5
+        // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
+        // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult Edit([Bind(Include = "BookId,BookTitle,Author,Genre")] Book book)
+        {
+            if (ModelState.IsValid)
+            {
+                //db.Entry(book).State = EntityState.Modified;
+                //db.SaveChanges();
+                db.Save(book);
+                return RedirectToAction("Index");
+            }
+            return View("Edit", book);
+        }
+
+        // GET: Books/Delete/5
+        public ActionResult Delete(int? id)
+        {
+            if (id == null)
+            {
+                //return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+                return View("Error");
+            }
+            //Book book = db.Books.Find(id);
+            Book book = db.Books.SingleOrDefault(b => b.BookId == id);
+            if (book == null)
+            {
+                //return HttpNotFound();
+                return View("Error");
+            }
+            return View("Delete", book);
+        }
 
         //// POST: Books/Delete/5
         //[HttpPost, ActionName("Delete")]
