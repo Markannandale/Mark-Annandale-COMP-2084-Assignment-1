@@ -139,16 +139,30 @@ namespace Assignment1.Controllers
             return View("Delete", book);
         }
 
-        //// POST: Books/Delete/5
-        //[HttpPost, ActionName("Delete")]
-        //[ValidateAntiForgeryToken]
-        //public ActionResult DeleteConfirmed(int id)
-        //{
-        //    Book book = db.Books.Find(id);
-        //    db.Books.Remove(book);
-        //    db.SaveChanges();
-        //    return RedirectToAction("Index");
-        //}
+        // POST: Books/Delete/5
+        [HttpPost, ActionName("Delete")]
+        [ValidateAntiForgeryToken]
+        public ActionResult DeleteConfirmed(int? id)
+        {
+            //Book book = db.Books.Find(id);
+            //db.Books.Remove(book);
+            //db.SaveChanges();
+            if (id == null)
+            {
+                return View("Error");
+            }
+
+            Book book = db.Books.SingleOrDefault(b => b.BookId == id);
+
+            if (book == null)
+            {
+                return View("Error");
+            }
+
+            db.Delete(book);
+
+            return RedirectToAction("Index");
+        }
 
         //protected override void Dispose(bool disposing)
         //{

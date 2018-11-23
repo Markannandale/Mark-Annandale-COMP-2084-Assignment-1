@@ -178,7 +178,7 @@ namespace Assignment2.Tests.Controllers
         public void DeleteInvalidId()
         {
             // act
-            var result = (ViewResult)controller.Delete(3739);
+            var result = (ViewResult)controller.Delete(5098);
 
             // assert
             Assert.AreEqual("Error", result.ViewName);
@@ -195,7 +195,7 @@ namespace Assignment2.Tests.Controllers
         }
 
         [TestMethod]
-        public void DeleteValidIdLoadsAlbum()
+        public void DeleteValidIdLoadsBooks()
         {
             // act
             Book result = (Book)((ViewResult)controller.Delete(100)).Model;
@@ -204,6 +204,118 @@ namespace Assignment2.Tests.Controllers
             Assert.AreEqual(books[0], result);
         }
 
+        #endregion
+
+        //POST: Create test
+        #region
+        [TestMethod]
+        public void CreateValidBook()
+        {
+            // arrange
+            Book newBook = new Book
+            {
+                BookId = 354,
+                BookTitle = "Fifty",
+                Author = "Ned",
+                Genre = "Horror"
+            };
+
+            // act
+            RedirectToRouteResult result = (RedirectToRouteResult)controller.Create(newBook);
+
+            // assert
+            Assert.AreEqual("Index", result.RouteValues["action"]);
+        }
+
+        [TestMethod]
+        public void CreateInvalidBook()
+        {
+            // arrange
+            Book invalid = new Book();
+
+            // act
+            controller.ModelState.AddModelError("Cannot create", "create exception");
+            ViewResult result = (ViewResult)controller.Create(invalid);
+
+            // assert
+            Assert.AreEqual("Create", result.ViewName);
+        }
+        #endregion
+
+        //POST: Edit test
+        #region
+
+        [TestMethod]
+        public void EditPostLoadsIndex()
+        {
+            // act
+            RedirectToRouteResult result = (RedirectToRouteResult)controller.Edit(books[0]);
+
+            // assert
+            Assert.AreEqual("Index", result.RouteValues["action"]);
+        }
+
+        [TestMethod]
+        public void EditPostInvalidLoadsView()
+        {
+            // arrange
+            Book invalid = new Book { BookId = 35 };
+            controller.ModelState.AddModelError("Error", "Won't Save");
+
+            // act
+            ViewResult result = (ViewResult)controller.Edit(invalid);
+
+            // assert
+            Assert.AreEqual("Edit", result.ViewName);
+        }
+
+        [TestMethod]
+        public void EditPostInvalidLoadsAlbum()
+        {
+            // arrange
+            Book invalid = new Book { BookId = 50 };
+            controller.ModelState.AddModelError("Error", "Won't Save");
+
+            // act
+            Book result = (Book)((ViewResult)controller.Edit(invalid)).Model;
+
+            // assert
+            Assert.AreEqual(invalid, result);
+        }
+
+        #endregion
+
+        //POST: Delete test
+        #region
+        [TestMethod]
+        public void DeleteConfirmedNoId()
+        {
+            // act
+            ViewResult result = (ViewResult)controller.DeleteConfirmed(null);
+
+            // assert
+            Assert.AreEqual("Error", result.ViewName);
+        }
+
+        [TestMethod]
+        public void DeleteConfirmedInvalidId()
+        {
+            // act
+            ViewResult result = (ViewResult)controller.DeleteConfirmed(1234);
+
+            // assert
+            Assert.AreEqual("Error", result.ViewName);
+        }
+
+        [TestMethod]
+        public void DeleteConfirmedValidId()
+        {
+            // act
+            RedirectToRouteResult result = (RedirectToRouteResult)controller.DeleteConfirmed(300);
+
+            // assert
+            Assert.AreEqual("Index", result.RouteValues["action"]);
+        }
         #endregion
     }
 }
